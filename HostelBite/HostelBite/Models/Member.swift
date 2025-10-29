@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+//Member class (roommate)
+struct Member: Identifiable,Codable {
+    
+    let id: UUID = UUID();
+    let name: String;
+    
+    init(name: String) {
+        self.name = name
+    }
+}
