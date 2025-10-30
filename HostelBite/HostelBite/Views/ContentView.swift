@@ -6,45 +6,65 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    
+    @Environment(\.modelContext) private var context
+    @StateObject private var appVM: AppViewModel
+    @StateObject private var groceryVM = GroceryViewModel()
+    @State private var showAddRoommate = false
+    @State private var showGroceries = false
+    
+    init(context: ModelContext) {
+            _appVM = StateObject(wrappedValue: AppViewModel(context: context))
+        }
+    
     var body: some View {
-        ZStack {
-            // Background color
-            Color.orange
-                .ignoresSafeArea()
+        VStack {
             
-            VStack {
-                Spacer()
+            Text("🍴 HostelBite")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top)
+
+            List {
+                Section("Roommates") {
+                    ForEach(appVM.roommates) { roommate in
+                        Text(roommate.name)
+                    }
+                }
+            }
+            
+            HStack {
+                Button("➕ Add Roommate") {
+                    showAddRoommate.toggle()
+                }
+                .buttonStyle(.borderedProminent)
                 
-                // App title
-                Text("🍴 HostelBite")
-                    .font(.system(size: 50, design: .serif))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                
-                // App description
-                Text("Organize weekly meals with your roommates")
-                    .font(.system(size: 20, weight: .light, design: .default))
-                    .font(.subheadline .monospaced())
-                    .foregroundColor(.white.opacity(0.9))
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 5)
-                    .padding(.horizontal)
-                
-                Spacer()
-                
-                // Developers' names
-                Text("Developed by: Sithum Raigamage, Namith ,Sanuth")
-                    .font(.footnote)
-                    .foregroundColor(.white.opacity(0.8))
-                    .padding(.bottom, 20)
+                Button("🛒 Groceries"){
+                    showGroceries.toggle()
+                }
+                .buttonStyle(.bordered)
             }
             .padding()
+        }
+        
+        .sheet(isPresented: $showAddRoommate) {
+            //do something
+            AddRoommateView(viewModel: appVM)
+        }
+        
+        .sheet(isPresented: $showGroceries) {
+            //add grocies
+            GrocerySelectionView(viewModel: groceryVM)
         }
     }
 }
 
 #Preview {
-    ContentView()
+    // Use a preview container for SwiftData
+    let container = try! ModelContainer(for: Member.self, Meal.self, Assignment.self)
+    return ContentView(context: container.mainContext)
+        .modelContainer(container)
 }

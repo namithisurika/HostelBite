@@ -6,14 +6,17 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Meal:Identifiable,Codable {
-    
-    var id: UUID = UUID()
+/// Represents a meal and its ingredients
+@Model
+final class Meal {
+    @Attribute(.unique) var id: UUID
     var name: String
-    var ingredients: [String] // used for grocery list
-    
-    init(name: String, ingredients: [String] = []) {
+    var ingredients: [String]
+
+    init(name: String, ingredients: [String]) {
+        self.id = UUID()
         self.name = name
         self.ingredients = ingredients
     }

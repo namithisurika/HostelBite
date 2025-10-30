@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct HostelBiteApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(context: HostelBiteModelContainer.shared.mainContext)
         }
+        .modelContainer(HostelBiteModelContainer.shared)
     }
 }

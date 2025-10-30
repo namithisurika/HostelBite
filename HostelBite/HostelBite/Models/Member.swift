@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import SwiftData
 
-//Member class (roommate)
-struct Member: Identifiable,Codable {
-    
-    let id: UUID = UUID();
-    let name: String;
-    
+/// Represents a roommate in the hostel
+@Model
+final class Member {
+    @Attribute(.unique) var id: UUID
+    var name: String
+
     init(name: String) {
+        self.id = UUID()
         self.name = name
     }
 }

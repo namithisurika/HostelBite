@@ -6,16 +6,18 @@
 //
 
 import Foundation
+import SwiftData
 
-/// Assignment for a single day
-struct Assignment: Identifiable,Codable {
-    var id: UUID = UUID()
+/// Represents daily assignments
+@Model
+final class Assignment {
+    @Attribute(.unique) var id: UUID
     var date: Date
     var meal: Meal
-    /// map from responsibility -> member id (UUID string)
-    var roles: [Responsibility: UUID]
-    
+    var roles: [Responsibility: UUID] // maps roles to Member IDs
+
     init(date: Date, meal: Meal, roles: [Responsibility: UUID]) {
+        self.id = UUID()
         self.date = date
         self.meal = meal
         self.roles = roles
